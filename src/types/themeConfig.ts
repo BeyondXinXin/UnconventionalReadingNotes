@@ -54,9 +54,7 @@ export interface ConfigSEO {
 }
 
 export interface ConfigComment {
-  disqus: Disqus
   giscus: Giscus
-  twikoo: Twikoo
 }
 
 export interface ConfigRSS {
@@ -86,16 +84,6 @@ interface Fonts {
   // TODO: 未实现
   _article?: string
   _code?: string
-}
-
-interface Twikoo {
-  envId: string
-  region?: string
-  lang?: string
-}
-
-interface Disqus {
-  shortname: string
 }
 
 interface Giscus {

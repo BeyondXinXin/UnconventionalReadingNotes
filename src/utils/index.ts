@@ -48,9 +48,26 @@ export function getPostDescription(post: Post) {
     return post.data.description
   }
 
-  const html = parser.render(post.body || '')
-  const sanitized = sanitizeHtml(html, { allowedTags: [] })
-  return sanitized.slice(0, 400)
+  let content = post.body || '';
+  content = content.replace(/!\[.*?\]\(.*?\)/g, '');
+  content = content.replace(/<figure\b[^>]*>[\s\S]*?<\/figure>/gi, '');
+  content = content.replace(/<img\b[^>]*>/gi, '');
+
+  // 渲染 Markdown 为 HTML
+  const html = parser.render(content);
+
+  // 完全移除所有 HTML 标签
+  const sanitized = sanitizeHtml(html, {
+    allowedTags: [], // 不允许任何标签
+    allowedAttributes: {} // 不允许任何属性
+  });
+
+  // 清理多余空白行和空格
+  const trimmed = sanitized
+    .replace(/\s+/g, ' ') // 将多个空白字符替换为单个空格
+    .trim();
+
+  return trimmed.slice(0, 400);
 }
 
 export function formatDate(date: Date, format: string = 'YYYY-MM-DD') {
